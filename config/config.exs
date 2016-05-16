@@ -31,3 +31,6 @@ import_config "#{Mix.env}.exs"
 config :phoenix, :generators,
   migration: true,
   binary_id: true
+
+config :simply_learn,
+  ecto_repos: [SL.Repo]
