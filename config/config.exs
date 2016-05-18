@@ -7,7 +7,7 @@ use Mix.Config
 
 # Configures the namespace used by Phoenix generators
 config :simply_learn,
-  app_namespace: SL
+  namespace: SL
 
 # Configures the endpoint
 config :simply_learn, SL.Endpoint,
