@@ -3,9 +3,9 @@
 <table class="table">
   <thead>
     <tr>
+      <th></th>
       <th>Title</th>
       <th>Isbn</th>
-      <th>Image</th>
       <th>Description</th>
 
       <th></th>
@@ -14,9 +14,9 @@
   <tbody>
 <%= for book <- @books do %>
     <tr>
+      <td><img src="<%= book.image %>" alt="<%= book.title %>" /></td>
       <td><%= book.title %></td>
       <td><%= book.isbn %></td>
-      <td><%= book.image %></td>
       <td><%= book.description %></td>
 
       <td class="text-right">
