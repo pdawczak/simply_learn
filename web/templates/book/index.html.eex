@@ -14,7 +14,7 @@
   <tbody>
 <%= for book <- @books do %>
     <tr>
-      <td><img src="<%= book.image %>" alt="<%= book.title %>" /></td>
+      <td><img src="<%= book.image_url %>" alt="<%= book.title %>" /></td>
       <td><%= book.title %></td>
       <td><%= book.isbn %></td>
       <td><%= book.description %></td>

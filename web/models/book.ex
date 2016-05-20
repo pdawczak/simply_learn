@@ -4,7 +4,7 @@ defmodule SL.Book do
   schema "books" do
     field :title, :string
     field :isbn, :string
-    field :image, :string
+    field :image_url, :string
     field :description, :string
 
     timestamps
@@ -15,7 +15,7 @@ defmodule SL.Book do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:title, :isbn, :image, :description])
-    |> validate_required([:title, :isbn, :image, :description])
+    |> cast(params, [:title, :isbn, :image_url, :description])
+    |> validate_required([:title, :isbn, :image_url, :description])
   end
 end
