@@ -8,6 +8,7 @@
 
   <div class="form-group">
     <input class="btn btn-primary" type="submit" value="Submit">
-    <a href="<%= book_path(@conn, :index) %>">Cancel</a>
   </div>
 </form>
+
+<a href="<%= book_path(@conn, :index) %>">Cancel</a>
