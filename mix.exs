@@ -19,7 +19,7 @@ defmodule SL.Mixfile do
   def application do
     [mod: {SL, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
-                    :gettext, :phoenix_ecto, :postgrex, :ex_machina]]
+                    :gettext, :phoenix_ecto, :postgrex]]
   end
 
   # Specifies which paths to compile per environment.
