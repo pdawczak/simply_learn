@@ -9,6 +9,11 @@ defmodule SL.BookControllerTest do
     assert html_response(conn, 200) =~ "Listing books"
   end
 
+  test "lets you start adding new book by providing ISBN", %{conn: conn} do
+    conn = get conn, book_path(conn, :start_new)
+    assert html_response(conn, 200) =~ "ISBN"
+  end
+
   test "renders form for new resources", %{conn: conn} do
     conn = get conn, book_path(conn, :new)
     assert html_response(conn, 200) =~ "New book"
