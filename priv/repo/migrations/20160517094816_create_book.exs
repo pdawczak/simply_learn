@@ -6,7 +6,7 @@ defmodule SL.Repo.Migrations.CreateBook do
       add :id, :binary_id, primary_key: true
       add :title, :string
       add :isbn, :string
-      add :image, :string
+      add :image_url, :string
       add :description, :text
 
       timestamps
