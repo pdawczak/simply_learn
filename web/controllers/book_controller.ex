@@ -8,6 +8,15 @@ defmodule SL.BookController do
     render(conn, "index.html", books: books)
   end
 
+  def start_new(conn, _params) do
+    render(conn, "start_new.html")
+  end
+
+  def new(conn, %{"isbn" => isbn}) do
+    changeset = Book.changeset(%Book{isbn: isbn})
+    render(conn, "new.html", changeset: changeset)
+  end
+
   def new(conn, _params) do
     changeset = Book.changeset(%Book{})
     render(conn, "new.html", changeset: changeset)

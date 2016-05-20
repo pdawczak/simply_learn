@@ -29,4 +29,4 @@
   </tbody>
 </table>
 
-<%= link "New book", to: book_path(@conn, :new) %>
+<%= link "New book", to: book_path(@conn, :start_new) %>

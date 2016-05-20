@@ -17,6 +17,7 @@ defmodule SL.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/books/start-new", BookController, :start_new
     resources "/books", BookController
   end
 
