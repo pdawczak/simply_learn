@@ -19,7 +19,7 @@ defmodule SL.Remote.Data.Book.Amazon do
               Floki.find(body, "#bookDescription_feature_div noscript div")
               |> Floki.text
 
-            %{description: description}
+            %{description: String.strip(description)}
 
           {:error, _response} ->
             %{}
@@ -31,7 +31,7 @@ defmodule SL.Remote.Data.Book.Amazon do
   end
 
   def perform_search(isbn) do
-    HTTPoison.get("https://www.amazon.co.uk/s/ref=nb_sb_noss?url=search-alias%3Dstripbooks&field-keywords=" <> isbn)
+    HTTPoison.get(amazon_search_endpoint <> "?url=search-alias%3Dstripbooks&field-keywords=" <> isbn)
   end
 
   def obtain_content_for(nil) do
@@ -41,4 +41,7 @@ defmodule SL.Remote.Data.Book.Amazon do
   def obtain_content_for(url) do
     HTTPoison.get(url)
   end
+
+  defp amazon_search_endpoint,
+  do: Application.get_env(:simply_learn, :amazon_search_endpoint)
 end
