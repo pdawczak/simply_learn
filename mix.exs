@@ -40,7 +40,8 @@ defmodule SL.Mixfile do
      {:cowboy, "~> 1.0"},
      {:ex_machina, "~> 0.6.1", only: :test},
      {:httpoison, "~> 0.8.0"},
-     {:floki, "~> 0.8"}]
+     {:floki, "~> 0.8"},
+     {:bypass, "~> 0.1", only: :test}]
   end
 
   # Aliases are shortcut or tasks specific to the current project.
