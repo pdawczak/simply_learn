@@ -29,13 +29,27 @@ defmodule SL.BookController do
     changeset = Book.changeset(%Book{}, book_params)
 
     case Repo.insert(changeset) do
-      {:ok, _book} ->
+      {:ok, book} ->
         conn
+        |> create_new_book_feed(book)
         |> put_flash(:info, "Book created successfully.")
         |> redirect(to: book_path(conn, :index))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  defp create_new_book_feed(conn, book) do
+    feed =
+      %SL.Feed{
+        title: "New book",
+        content: "*#{book.title}* has been added.",
+        link: book_path(conn, :show, book)
+      }
+
+    Repo.insert(feed)
+
+    conn
   end
 
   def show(conn, %{"id" => id}) do

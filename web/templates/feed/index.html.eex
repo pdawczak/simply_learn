@@ -1,0 +1,15 @@
+<%= for feed_item <- @feeds do %>
+  <hr>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%= feed_item.title %>
+    </div>
+    <div class="panel-body">
+      <%= feed_item.content %>
+    </div>
+    <div class="panel-footer">
+      <%= feed_item.inserted_at %>
+      <%= feed_link(feed_item) %>
+    </div>
+  </div>
+<% end %>

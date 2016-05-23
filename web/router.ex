@@ -16,7 +16,7 @@ defmodule SL.Router do
   scope "/", SL do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
+    get "/", FeedController, :index
     get "/books/start-new", BookController, :start_new
     resources "/books", BookController
   end
