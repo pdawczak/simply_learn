@@ -6,7 +6,8 @@ defmodule SL.Remote.Data.Book.Upcitemdb do
   end
 
   defp do_get_data(isbn) do
-    get_content_for(isbn)
+    isbn
+    |> get_content
     |> extract_data
   end
 
@@ -39,7 +40,7 @@ defmodule SL.Remote.Data.Book.Upcitemdb do
     |> to_string
   end
 
-  defp get_content_for(isbn) do
+  defp get_content(isbn) do
     isbn
     |> build_url
     |> HTTPoison.get
