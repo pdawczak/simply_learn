@@ -36,7 +36,7 @@ defmodule SL.Remote.Data.Book.Upcitemdb do
   defp prepare_isbn(isbn) do
     isbn
     |> to_char_list
-    |> Enum.filter(fn c -> c != ?- end)
+    |> Enum.filter(&(&1 != ?-))
     |> to_string
   end
 
