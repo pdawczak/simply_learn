@@ -34,3 +34,6 @@ config :phoenix, :generators,
 
 config :simply_learn,
   ecto_repos: [SL.Repo]
+
+config :simply_learn,
+  upcitemdb_endpoint: "https://api.upcitemdb.com/prod/trial/lookup"
