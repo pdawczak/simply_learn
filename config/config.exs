@@ -37,3 +37,6 @@ config :simply_learn,
 
 config :simply_learn,
   upcitemdb_endpoint: "https://api.upcitemdb.com/prod/trial/lookup"
+
+config :simply_learn,
+  amazon_search_endpoint: "https://www.amazon.co.uk/s/ref=nb_sb_noss"
