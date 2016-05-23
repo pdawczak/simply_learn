@@ -13,7 +13,10 @@ defmodule SL.BookController do
   end
 
   def new(conn, %{"isbn" => isbn}) do
-    changeset = Book.changeset(%Book{isbn: isbn})
+    changeset =
+      SL.Remote.Data.Book.get_data(isbn, %Book{isbn: isbn})
+      |> Book.changeset()
+
     render(conn, "new.html", changeset: changeset)
   end
 
