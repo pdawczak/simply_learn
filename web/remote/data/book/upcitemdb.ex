@@ -6,13 +6,19 @@ defmodule SL.Remote.Data.Book.Upcitemdb do
   end
 
   defp do_get_data(isbn) do
-    case get_content("https://api.upcitemdb.com/prod/trial/lookup?upc=" <> prepare_isbn(isbn)) do
+    case get_content(upcitemdb_endpoint <> "?" <> URI.encode_query(%{"upc" => prepare_isbn(isbn)})) do
+      {:ok, %HTTPoison.Response{status_code: 400}} ->
+        %{}
+
       {:ok, %HTTPoison.Response{body: body}} ->
         decoded = Poison.decode!(body)
-        item = Enum.at(decoded["items"], 0)
-
-        %{title: item["title"],
-          image_url: Enum.at(item["images"], 0)}
+        case Enum.at(decoded["items"], 0) do
+          %{"title" => title, "images" => images} ->
+            %{title: title,
+              image_url: Enum.at(images, 0)}
+          _ ->
+            %{}
+        end
 
       {:error, _response} ->
         %{}
@@ -29,4 +35,7 @@ defmodule SL.Remote.Data.Book.Upcitemdb do
   defp get_content(url) do
     HTTPoison.get(url)
   end
+
+  defp upcitemdb_endpoint,
+  do: Application.get_env(:simply_learn, :upcitemdb_endpoint)
 end
