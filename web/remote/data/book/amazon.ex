@@ -6,40 +6,44 @@ defmodule SL.Remote.Data.Book.Amazon do
   end
 
   defp do_get_data(isbn) do
-    case perform_search(isbn) do
-      {:ok, %HTTPoison.Response{body: body}} ->
-        details_page_url =
-          Floki.find(body, "#s-results-list-atf #result_0 .s-access-detail-page")
-          |> Floki.attribute("href")
-          |> Enum.at(0)
-
-        case obtain_content_for(details_page_url) do
-          {:ok, %HTTPoison.Response{body: body}} ->
-            description =
-              Floki.find(body, "#bookDescription_feature_div noscript div")
-              |> Floki.text
-
-            %{description: String.strip(description)}
-
-          {:error, _response} ->
-            %{}
-        end
-
-      {:error, _respone} ->
-        %{}
-    end
+    isbn
+    |> build_search_url
+    |> get_content
+    |> fetch_first_results_href
+    |> get_content
+    |> extract_data
   end
 
-  def perform_search(isbn) do
-    HTTPoison.get(amazon_search_endpoint <> "?url=search-alias%3Dstripbooks&field-keywords=" <> isbn)
+  defp build_search_url(isbn) do
+    amazon_search_endpoint <> "?url=search-alias%3Dstripbooks&field-keywords=" <> isbn
   end
 
-  def obtain_content_for(nil) do
-    {:error, "No url :("}
+  defp fetch_first_results_href({:error, _}),
+  do: nil
+
+  defp fetch_first_results_href({:ok, %HTTPoison.Response{body: body}}) do
+    body
+    |> Floki.find("#s-results-list-atf #result_0 .s-access-detail-page")
+    |> Floki.attribute("href")
+    |> Enum.at(0)
   end
 
-  def obtain_content_for(url) do
-    HTTPoison.get(url)
+  defp get_content(nil),
+  do: {:error, :no_url}
+
+  defp get_content(url),
+  do: HTTPoison.get(url)
+
+  defp extract_data({:error, _}),
+  do: %{}
+
+  defp extract_data({:ok, %HTTPoison.Response{body: body}}) do
+    description =
+      body
+      |> Floki.find("#bookDescription_feature_div noscript div")
+      |> Floki.text
+
+    %{description: String.strip(description)}
   end
 
   defp amazon_search_endpoint,
