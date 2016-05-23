@@ -6,7 +6,7 @@ defmodule SL.Remote.Data.Book.Upcitemdb do
   end
 
   defp do_get_data(isbn) do
-    case get_content(upcitemdb_endpoint <> "?" <> URI.encode_query(%{"upc" => prepare_isbn(isbn)})) do
+    case get_content_for(isbn) do
       {:ok, %HTTPoison.Response{status_code: 400}} ->
         %{}
 
@@ -32,8 +32,14 @@ defmodule SL.Remote.Data.Book.Upcitemdb do
     |> to_string
   end
 
-  defp get_content(url) do
-    HTTPoison.get(url)
+  defp get_content_for(isbn) do
+    isbn
+    |> build_url
+    |> HTTPoison.get
+  end
+
+  defp build_url(isbn) do
+    upcitemdb_endpoint <> "?" <> URI.encode_query(%{"upc" => prepare_isbn(isbn)})
   end
 
   defp upcitemdb_endpoint,
