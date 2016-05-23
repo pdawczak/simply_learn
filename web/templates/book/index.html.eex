@@ -1,32 +1,20 @@
 <h2>Listing books</h2>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Title</th>
-      <th>Isbn</th>
-      <th>Description</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
 <%= for book <- @books do %>
-    <tr>
-      <td><img src="<%= book.image_url %>" alt="<%= book.title %>" /></td>
-      <td><%= book.title %></td>
-      <td><%= book.isbn %></td>
-      <td><%= book.description %></td>
-
-      <td class="text-right">
-        <%= link "Show", to: book_path(@conn, :show, book), class: "btn btn-default btn-xs" %>
-        <%= link "Edit", to: book_path(@conn, :edit, book), class: "btn btn-default btn-xs" %>
-        <%= link "Delete", to: book_path(@conn, :delete, book), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
-      </td>
-    </tr>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="thumbnail">
+        <a href="<%= book_path(@conn, :show, book) %>">
+          <img src="<%= book.image_url %>" alt="<%= book.title %>" />
+        </a>
+      </div>
+    </div>
+    <div class="col-sm-9">
+      <h4><%= link book.title, to: book_path(@conn, :show, book) %></h4>
+      <small class="text-muted"><%= book.isbn %></small>
+      <p><%= shorter_description(book) %></p>
+    </div>
+  </div>
 <% end %>
-  </tbody>
-</table>
 
 <%= link "New book", to: book_path(@conn, :start_new) %>
