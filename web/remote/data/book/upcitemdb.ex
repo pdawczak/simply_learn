@@ -6,21 +6,21 @@ defmodule SL.Remote.Data.Book.Upcitemdb do
   end
 
   defp do_get_data(isbn) do
-    case get_content_for(isbn) do
-      {:ok, %HTTPoison.Response{status_code: 400}} ->
-        %{}
+    get_content_for(isbn)
+    |> extract_data
+  end
 
-      {:ok, %HTTPoison.Response{body: body}} ->
-        decoded = Poison.decode!(body)
-        case Enum.at(decoded["items"], 0) do
-          %{"title" => title, "images" => images} ->
-            %{title: title,
-              image_url: Enum.at(images, 0)}
-          _ ->
-            %{}
-        end
+  defp extract_data({:ok, %HTTPoison.Response{status_code: 400}}), do: %{}
 
-      {:error, _response} ->
+  defp extract_data({:error, _}), do: %{}
+
+  defp extract_data({:ok, %HTTPoison.Response{body: body}}) do
+    decoded = Poison.decode!(body)
+    case Enum.at(decoded["items"], 0) do
+      %{"title" => title, "images" => images} ->
+        %{title: title,
+          image_url: Enum.at(images, 0)}
+      _ ->
         %{}
     end
   end
