@@ -14,7 +14,9 @@ defmodule SL.Remote.Data.Book.UpcitemdbTest do
   test "fetches data from server", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert "upc=123456789" == conn.query_string
-      Plug.Conn.resp(conn, 200, ~s<{"items": [{"title": "Sample Book", "images": ["http://pic.com/sample.png"]}]}>)
+      response = ~s<{"items": [{"title": "Sample Book",
+                                "images": ["http://pic.com/sample.png"]}]}>
+      Plug.Conn.resp(conn, 200, response)
     end
 
     Upcitemdb.get_data("123-456-789", self())
