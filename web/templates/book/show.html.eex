@@ -1,12 +1,13 @@
-<h2>
-  <%= @book.title %>
+<h3>
+  <%= @book.title %> <br/>
   <small><%= @book.isbn %></small>
-</h2>
+</h3>
 
 <p>
-  <img src="<%= @book.image_url %>" alt="<%= @book.title %>">
+  <div class="thumbnail" style="float: left; margin-right: 20px; width: 142px;">
+    <img src="<%= @book.image_url %>" alt="<%= @book.title %>">
+  </div>
   <%= @book.description %>
 </p>
 
-<%= link "Edit", to: book_path(@conn, :edit, @book) %>
-<%= link "Back", to: book_path(@conn, :index) %>
+<%= link "Back to list of books", to: book_path(@conn, :index) %>
