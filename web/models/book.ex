@@ -16,6 +16,6 @@ defmodule SL.Book do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:title, :isbn, :image_url, :description])
-    |> validate_required([:title, :isbn, :image_url, :description])
+    |> validate_required([:title, :isbn, :description])
   end
 end
