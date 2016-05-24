@@ -1,0 +1,9 @@
+<h2>
+  <%= @book.title %> <br/>
+  <small class="text-muted">Add book copy</small>
+</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: book_book_copy_path(@conn, :create, @book) %>
+
+<%= link "Cancel", to: book_path(@conn, :show, @book) %>

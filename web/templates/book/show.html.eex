@@ -4,8 +4,22 @@
 </h3>
 
 <p>
-  <div class="thumbnail" style="float: left; margin-right: 20px; width: 142px;">
-    <img src="<%= @book.image_url %>" alt="<%= @book.title %>">
+  <div class="row">
+    <div class="col-sm-12 col-md-3">
+      <div class="thumbnail" style="margin-right: 20px; width: 142px;">
+        <img src="<%= @book.image_url %>" alt="<%= @book.title %>">
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-9">
+      <ul class="list-group">
+        <%= for book_copy <- @book.book_copies do %>
+          <li class="list-group-item">
+            <%= book_copy.code %>
+          </li>
+        <% end %>
+      </ul>
+      <%= link "Add copy", to: book_book_copy_path(@conn, :new, @book) %>
+    </div>
   </div>
   <%= @book.description %>
 </p>

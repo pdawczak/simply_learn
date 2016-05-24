@@ -56,7 +56,11 @@ defmodule SL.BookController do
   end
 
   def show(conn, %{"id" => id}) do
-    book = Repo.get!(Book, id)
+    book =
+      Book
+      |> Repo.get!(id)
+      |> Repo.preload(:book_copies)
+
     render(conn, "show.html", book: book)
   end
 

@@ -21,4 +21,11 @@ defmodule SL.Book do
     |> validate_required([:title, :isbn, :description])
     |> unique_constraint(:isbn, name: :books_isbn_index)
   end
+
+  def with_book_copies(id) do
+    q = from b in SL.Book,
+      where: b.id == ^id,
+      preload: [:book_copies]
+    SL.Repo.one(q)
+  end
 end

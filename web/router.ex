@@ -18,7 +18,9 @@ defmodule SL.Router do
 
     get "/", FeedController, :index
     get "/books/start-new", BookController, :start_new
-    resources "/books", BookController
+    resources "/books", BookController do
+      resources "/book_copies", BookCopyController, only: [:new, :create, :delete]
+    end
   end
 
   # Other scopes may use custom stacks.
