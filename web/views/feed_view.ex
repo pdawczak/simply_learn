@@ -3,17 +3,11 @@ defmodule SL.FeedView do
 
   alias SL.Feed
 
-  def feed_link(%Feed{link: nil}),
-  do: ""
-
-  def feed_link(%Feed{link: link}) do
-    content_tag :span, class: "pull-right" do
-      content_tag :a, href: link do
-        "Open"
-      end
-    end
+  def render("feed.json", %{feed: feed}) do
+    %{id:          feed.id,
+      content:     feed.content,
+      title:       feed.title,
+      link:        feed.link,
+      inserted_at: feed.inserted_at}
   end
-
-  def feed_link(_),
-  do: ""
 end

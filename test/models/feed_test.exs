@@ -3,7 +3,7 @@ defmodule SL.FeedTest do
 
   alias SL.Feed
 
-  @valid_attrs %{content: "some content", link: "some content"}
+  @valid_attrs %{title: "some title", content: "some content", link: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

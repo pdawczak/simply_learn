@@ -3,6 +3,7 @@ defmodule SL.UserSocket do
 
   ## Channels
   # channel "rooms:*", SL.RoomChannel
+  channel "feed:lobby", SL.FeedChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

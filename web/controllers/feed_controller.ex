@@ -3,7 +3,6 @@ defmodule SL.FeedController do
 
   def index(conn, _params) do
     conn
-    |> assign(:feeds, SL.Feed.recent)
     |> render("index.html")
   end
 end
