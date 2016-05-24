@@ -77,6 +77,43 @@ if (borrowBookCopyWidget) {
   let token = borrowBookCopyWidget.getAttribute("data-token");
   let borrowChannel = socket.channel(`borrow_book_copy:${bookCopyId}`, {token: token});
   borrowChannel.join()
-    .receive("ok", resp => { console.log(resp); })
+    .receive("ok", resp => { renderWidget(resp.status); })
     .receive("error", resp => { console.log(resp); });
+
+  borrowChannel.on("borrowing_updated", data => { renderWidget(data) });
+
+  function renderWidget (status) {
+    console.log(status);
+    if (status.available === true) {
+      borrowBookCopyWidget.innerHTML = renderAvailableToBorrow();
+      document.querySelector(".to-borrow").addEventListener("click", e => {
+        borrowChannel.push("borrow");
+      });
+    } else if (status.can_return === true) {
+      borrowBookCopyWidget.innerHTML = renderCanReturn();
+      document.querySelector(".to-return").addEventListener("click", e => {
+        borrowChannel.push("return");
+      });
+    }
+  }
+
+  function renderAvailableToBorrow () {
+    let template = document.createElement("div");
+    let borrowButton = document.createElement("a");
+    borrowButton.innerText = "I'm borriwing it!";
+    borrowButton.className = "btn btn-primary btn-lg btn-block to-borrow";
+    template.appendChild(borrowButton);
+
+    return template.outerHTML;
+  }
+
+  function renderCanReturn () {
+    let template = document.createElement("div");
+    let returnButton = document.createElement("a");
+    returnButton.innerText = "OK. I want to return it now!";
+    returnButton.className = "btn btn-info btn-lg btn-block to-return";
+    template.appendChild(returnButton);
+
+    return template.outerHTML;
+  }
 }

@@ -5,6 +5,7 @@ defmodule SL.BookCopy do
     field :code, :string
 
     belongs_to :book, SL.Book
+    has_many :borrowings, SL.Borrowing
 
     timestamps
   end
