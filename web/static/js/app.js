@@ -110,7 +110,7 @@ if (borrowBookCopyWidget) {
   function renderCanReturn () {
     let template = document.createElement("div");
     let returnButton = document.createElement("a");
-    returnButton.innerText = "OK. I want to return it now!";
+    returnButton.innerText = "OK. I want to return it now.";
     returnButton.className = "btn btn-info btn-lg btn-block to-return";
     template.appendChild(returnButton);
 
