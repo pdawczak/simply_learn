@@ -7,6 +7,8 @@ defmodule SL.Book do
     field :image_url, :string
     field :description, :string
 
+    has_many :book_copies, SL.BookCopy
+
     timestamps
   end
 
