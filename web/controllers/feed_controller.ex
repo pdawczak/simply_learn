@@ -1,7 +1,7 @@
 defmodule SL.FeedController do
   use SL.Web, :controller
 
-  def index(%{assigns: %{current_user: user}} = conn, params) when user != nil do
+  def index(%{assigns: %{current_user: user}} = conn, _params) when user != nil do
     conn
     |> render("index.html")
   end
