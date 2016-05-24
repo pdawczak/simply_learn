@@ -1,0 +1,3 @@
+<p style="text-align: center">
+  Please, <%= link "log in", to: auth_path(@conn, :index) %> to enjoy the content!
+</p>

@@ -19,7 +19,7 @@ defmodule SL.Mixfile do
   def application do
     [mod: {SL, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
-                    :gettext, :phoenix_ecto, :postgrex, :httpoison]]
+                    :gettext, :phoenix_ecto, :postgrex, :httpoison, :oauth2]]
   end
 
   # Specifies which paths to compile per environment.
@@ -41,7 +41,8 @@ defmodule SL.Mixfile do
      {:ex_machina, "~> 0.6.1", only: :test},
      {:httpoison, "~> 0.8.0"},
      {:floki, "~> 0.8"},
-     {:bypass, "~> 0.1", only: :test}]
+     {:bypass, "~> 0.1", only: :test},
+     {:oauth2, "~> 0.5.0"}]
   end
 
   # Aliases are shortcut or tasks specific to the current project.
