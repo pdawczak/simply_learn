@@ -4,13 +4,16 @@ defmodule SL.BorrowBookCopyChannel do
   def join("borrow_book_copy:" <> id, payload, socket) do
     socket = verify_token(payload, socket)
 
-    book_copy = SL.Repo.get(SL.BookCopy, id)
-
-    socket = assign(socket, :book_copy, book_copy)
-
-    borrowing_status = borrowing_status(book_copy, socket.assigns.user)
-
     if authorised?(socket) do
+      book_copy =
+        SL.BookCopy
+        |> SL.Repo.get(id)
+        |> SL.Repo.preload(:book)
+
+      socket = assign(socket, :book_copy, book_copy)
+
+      borrowing_status = borrowing_status(book_copy, socket.assigns.user)
+
       {:ok, %{status: borrowing_status}, socket}
     else
       {:error, %{reason: "unauthorised"}}
