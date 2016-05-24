@@ -17,5 +17,6 @@ defmodule SL.Book do
     struct
     |> cast(params, [:title, :isbn, :image_url, :description])
     |> validate_required([:title, :isbn, :description])
+    |> unique_constraint(:isbn, name: :books_isbn_index)
   end
 end
