@@ -59,6 +59,18 @@ defmodule SL.BookCopyController do
     end
   end
 
+  def show(conn, %{"id" => id}, book) do
+    book_copy =
+      book
+      |> assoc(:book_copies)
+      |> Repo.get!(id)
+
+    conn
+    |> assign(:book, book)
+    |> assign(:book_copy, book_copy)
+    |> render("show.html")
+  end
+
   def delete(conn, %{"id" => id}, book) do
     book_copy =
       book

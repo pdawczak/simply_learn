@@ -4,6 +4,7 @@ defmodule SL.UserSocket do
   ## Channels
   # channel "rooms:*", SL.RoomChannel
   channel "feed:lobby", SL.FeedChannel
+  channel "borrow_book_copy:*", SL.BorrowBookCopyChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

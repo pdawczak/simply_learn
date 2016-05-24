@@ -69,3 +69,14 @@ if (feedContainer) {
     return template.outerHTML;
   }
 }
+
+let borrowBookCopyWidget = document.getElementById("borrow-book-copy-widget");
+
+if (borrowBookCopyWidget) {
+  let bookCopyId = borrowBookCopyWidget.getAttribute("data-book-copy-id");
+  let token = borrowBookCopyWidget.getAttribute("data-token");
+  let borrowChannel = socket.channel(`borrow_book_copy:${bookCopyId}`, {token: token});
+  borrowChannel.join()
+    .receive("ok", resp => { console.log(resp); })
+    .receive("error", resp => { console.log(resp); });
+}

@@ -33,7 +33,7 @@ defmodule SL.Router do
 
     get "/books/start-new", BookController, :start_new
     resources "/books", BookController do
-      resources "/book_copies", BookCopyController, only: [:new, :create, :delete]
+      resources "/book_copies", BookCopyController, only: [:new, :create, :show, :delete]
     end
   end
 

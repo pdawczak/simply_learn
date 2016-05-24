@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+    <div class="thumbnail">
+      <img src="https://zxing.org/w/chart?cht=qr&amp;chs=300x300&amp;chld=L&amp;choe=UTF-8&amp;chl=<%= URI.encode(book_book_copy_path(@conn, :show, @book, @book_copy)) %>" class="gwt-Image">
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6">
+    <h4><%= @book.title %></h4>
+    <div id="borrow-book-copy-widget"
+         data-book-copy-id="<%= @book_copy.id %>"
+         data-token="<%= Phoenix.Token.sign(@conn, "user_id", @current_user.id) %>">
+    </div>
+  </div>
+</div>

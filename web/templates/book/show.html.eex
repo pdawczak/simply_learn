@@ -14,7 +14,7 @@
       <ul class="list-group">
         <%= for book_copy <- @book.book_copies do %>
           <li class="list-group-item">
-            <%= book_copy.code %>
+            <%= link book_copy.code, to: book_book_copy_path(@conn, :show, @book, book_copy) %>
           </li>
         <% end %>
       </ul>
