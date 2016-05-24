@@ -1,8 +1,6 @@
 defmodule SL.FeedView do
   use SL.Web, :view
 
-  alias SL.Feed
-
   def render("feed.json", %{feed: feed}) do
     %{id:          feed.id,
       content:     feed.content,
