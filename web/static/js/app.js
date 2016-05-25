@@ -100,7 +100,7 @@ if (borrowBookCopyWidget) {
   function renderAvailableToBorrow () {
     let template = document.createElement("div");
     let borrowButton = document.createElement("a");
-    borrowButton.innerText = "I'm borriwing it!";
+    borrowButton.innerText = "I'm borrowing it!";
     borrowButton.className = "btn btn-primary btn-lg btn-block to-borrow";
     template.appendChild(borrowButton);
 
