@@ -41,6 +41,9 @@ config :simply_learn,
 config :simply_learn,
   amazon_search_endpoint: "https://www.amazon.co.uk/s/ref=nb_sb_noss"
 
+config :simply_learn,
+  public: System.get_env("PUBLIC") || "http://localhost:4000"
+
 config :oauth2, Google,
   client_id: System.get_env("GOOGLE_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
