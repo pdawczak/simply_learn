@@ -8,7 +8,7 @@ defmodule Auth.OAuth2.Google do
      site:          "https://accounts.google.com",
      authorize_url: "/o/oauth2/auth",
      token_url:     "/o/oauth2/token",
-     redirect_uri:  "http://localhost:4000/auth/google",]
+     redirect_uri:  Application.get_env(:simply_learn, :public) <> "/auth/google",]
   end
 
   defp client do
