@@ -17,6 +17,7 @@
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
             <li><a href="<%= feed_path(@conn, :index) %>">Home</a></li>
+            <li><%= link "Books", to: book_path(@conn, :index) %></li>
             <li><%= link "Logout", to: auth_path(@conn, :delete) %></li>
           </ul>
         </nav>
