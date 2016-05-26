@@ -7,7 +7,10 @@ defmodule Auth.Plugs.SetUser do
   def call(conn, _) do
     case get_session(conn, :user_id) do
       nil -> conn
-      id  -> assign(conn, :current_user, SL.Repo.get(SL.User, id))
+      id  ->
+        conn
+        |> assign(:current_user, SL.Repo.get(SL.User, id))
+        |> assign(:user_token, Phoenix.Token.sign(conn, "user_id", id))
     end
   end
 end
