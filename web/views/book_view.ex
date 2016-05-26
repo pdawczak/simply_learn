@@ -12,4 +12,15 @@ defmodule SL.BookView do
 
   def shorter_description(%Book{description: description}),
   do: description
+
+  def format_description(%{description: nil}),
+  do: ""
+
+  def format_description(%Book{description: description}) do
+    description
+    |> String.split("\n")
+    |> Enum.map(&String.strip(&1))
+    |> Enum.filter(&(&1 != ""))
+    |> Enum.map(&content_tag(:p, &1))
+  end
 end
