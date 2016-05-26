@@ -3,6 +3,7 @@
     <h4><%= @book.title %></h4>
     <div id="borrow-book-copy-widget"
          data-book-copy-id="<%= @book_copy.id %>"
+         data-current_user_id="<%= @current_user.id %>"
          data-token="<%= Phoenix.Token.sign(@conn, "user_id", @current_user.id) %>">
     </div>
   </div>
