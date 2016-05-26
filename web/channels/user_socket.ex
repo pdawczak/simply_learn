@@ -21,8 +21,17 @@ defmodule SL.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
+  def connect(params, socket) do
+    case verify_token(params, socket) do
+      {:ok, user_id} ->
+        {:ok, assign(socket, :user, SL.Repo.get(SL.User, user_id))}
+      {:error, reason} ->
+        {:error, %{reason: reason}}
+    end
+  end
+
+  defp verify_token(%{"token" => token}, socket) do
+    Phoenix.Token.verify(socket, "user_id", token, max_age: 1209600)
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
