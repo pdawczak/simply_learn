@@ -86,10 +86,8 @@ defmodule SL.BorrowBookCopyChannel do
         %{available: true}
       %{ended_at: ended_at} when ended_at != nil ->
         %{available: true}
-      %{user_id: user_id} when user_id == current_user_id ->
-        %{can_return: true}
-      _ ->
-        %{available: false}
+      %{user: user} ->
+        %{available: false, borrowed_by: %{user_id: user.id, first_name: user.first_name, last_name: user.last_name}}
     end
   end
 
