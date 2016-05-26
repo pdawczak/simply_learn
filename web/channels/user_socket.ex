@@ -25,8 +25,8 @@ defmodule SL.UserSocket do
     case verify_token(params, socket) do
       {:ok, user_id} ->
         {:ok, assign(socket, :user, SL.Repo.get(SL.User, user_id))}
-      {:error, reason} ->
-        {:error, %{reason: reason}}
+      {:error, _reason} ->
+        :error
     end
   end
 
