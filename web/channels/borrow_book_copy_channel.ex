@@ -1,23 +1,17 @@
 defmodule SL.BorrowBookCopyChannel do
   use SL.Web, :channel
 
-  def join("borrow_book_copy:" <> id, payload, socket) do
-    socket = verify_token(payload, socket)
+  def join("borrow_book_copy:" <> id, _payload, socket) do
+    book_copy =
+      SL.BookCopy
+      |> SL.Repo.get(id)
+      |> SL.Repo.preload(:book)
 
-    if authorised?(socket) do
-      book_copy =
-        SL.BookCopy
-        |> SL.Repo.get(id)
-        |> SL.Repo.preload(:book)
+    socket = assign(socket, :book_copy, book_copy)
 
-      socket = assign(socket, :book_copy, book_copy)
+    borrowing_status = borrowing_status(book_copy)
 
-      borrowing_status = borrowing_status(book_copy, socket.assigns.user)
-
-      {:ok, %{status: borrowing_status}, socket}
-    else
-      {:error, %{reason: "unauthorised"}}
-    end
+    {:ok, %{status: borrowing_status}, socket}
   end
 
   def handle_in(event, params, socket) do
@@ -31,14 +25,14 @@ defmodule SL.BorrowBookCopyChannel do
                                     user_id: user.id})
       |> SL.Repo.insert!
 
-    broadcast_book_borrowed(socket, book_copy.book, user)
+    broadcast_book_borrowed(book_copy.book, user)
 
-    broadcast socket, "borrowing_updated", borrowing_status(book_copy, user)
+    broadcast socket, "borrowing_updated", borrowing_status(book_copy)
 
     {:reply, :ok, socket}
   end
 
-  defp broadcast_book_borrowed(socket, book, user) do
+  defp broadcast_book_borrowed(book, user) do
     {:ok, feed} =
       %SL.Feed{
         title: "Book borrowed",
@@ -58,14 +52,14 @@ defmodule SL.BorrowBookCopyChannel do
       |> SL.Borrowing.changeset(%{ended_at: Ecto.DateTime.utc})
       |> SL.Repo.update!
 
-    broadcast_book_returned(socket, book_copy.book, user)
+    broadcast_book_returned(book_copy.book, user)
 
-    broadcast socket, "borrowing_updated", borrowing_status(book_copy, user)
+    broadcast socket, "borrowing_updated", borrowing_status(book_copy)
 
     {:reply, :ok, socket}
   end
 
-  defp broadcast_book_returned(socket, book, user) do
+  defp broadcast_book_returned(book, user) do
     {:ok, feed} =
       %SL.Feed{
         title: "Book returned",
@@ -78,9 +72,7 @@ defmodule SL.BorrowBookCopyChannel do
     SL.Endpoint.broadcast("feed:lobby", "new_feed", %{feed: feed_json})
   end
 
-  defp borrowing_status(book_copy, current_user) do
-    current_user_id = current_user.id
-
+  defp borrowing_status(book_copy) do
     case last_borrowing(book_copy) do
       nil ->
         %{available: true}
@@ -98,20 +90,5 @@ defmodule SL.BorrowBookCopyChannel do
       preload: [:user],
       limit: 1
     )
-  end
-
-  defp authorised?(%{assigns: %{user: user}}) when user != nil,
-  do: true
-
-  defp authorised?(_socket),
-  do: false
-
-  defp verify_token(%{"token" => token}, socket) do
-    case Phoenix.Token.verify(socket, "user_id", token, max_age: 1209600) do
-      {:ok, user_id} ->
-        assign(socket, :user, SL.Repo.get(SL.User, user_id))
-      {:error, _} ->
-        socket
-    end
   end
 end
