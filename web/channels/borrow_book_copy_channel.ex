@@ -4,18 +4,20 @@ defmodule SL.BorrowBookCopyChannel do
   def join("borrow_book_copy:" <> id, _payload, socket) do
     book_copy =
       SL.BookCopy
-      |> SL.Repo.get(id)
-      |> SL.Repo.preload(:book)
+      |> Repo.get(id)
+      |> Repo.preload(:book)
 
-    socket = assign(socket, :book_copy, book_copy)
-
-    borrowing_status = borrowing_status(book_copy)
-
-    {:ok, %{status: borrowing_status}, socket}
+    {:ok,
+     %{status: borrowing_status(book_copy)},
+     assign(socket, :book_copy, book_copy)}
   end
 
   def handle_in(event, params, socket) do
-    handle_in(event, params, socket.assigns.book_copy, socket.assigns.user, socket)
+    handle_in(event,
+              params,
+              socket.assigns.book_copy,
+              socket.assigns.user,
+              socket)
   end
 
   def handle_in("borrow", _params, book_copy, user, socket) do
@@ -23,7 +25,7 @@ defmodule SL.BorrowBookCopyChannel do
       book_copy
       |> build_assoc(:borrowings, %{started_at: Ecto.DateTime.utc,
                                     user_id: user.id})
-      |> SL.Repo.insert!
+      |> Repo.insert!
 
     broadcast_book_borrowed(book_copy.book, user)
 
@@ -33,12 +35,12 @@ defmodule SL.BorrowBookCopyChannel do
   end
 
   defp broadcast_book_borrowed(book, user) do
-    {:ok, feed} =
+    feed =
       %SL.Feed{
         title: "Book borrowed",
         content: "*#{user.first_name} #{user.last_name}* has just borrowed copy of *#{book.title}*",
       }
-      |> Repo.insert
+      |> Repo.insert!
 
     feed_json = Phoenix.View.render(SL.FeedView, "feed.json", %{feed: feed})
 
@@ -50,7 +52,7 @@ defmodule SL.BorrowBookCopyChannel do
       book_copy
       |> last_borrowing
       |> SL.Borrowing.changeset(%{ended_at: Ecto.DateTime.utc})
-      |> SL.Repo.update!
+      |> Repo.update!
 
     broadcast_book_returned(book_copy.book, user)
 
@@ -60,12 +62,12 @@ defmodule SL.BorrowBookCopyChannel do
   end
 
   defp broadcast_book_returned(book, user) do
-    {:ok, feed} =
+    feed =
       %SL.Feed{
         title: "Book returned",
         content: "*#{user.first_name} #{user.last_name}* has just returned copy of *#{book.title}*",
       }
-      |> Repo.insert
+      |> Repo.insert!
 
     feed_json = Phoenix.View.render(SL.FeedView, "feed.json", %{feed: feed})
 
@@ -84,7 +86,7 @@ defmodule SL.BorrowBookCopyChannel do
   end
 
   defp last_borrowing(book_copy) do
-    SL.Repo.one(
+    Repo.one(
       from br in assoc(book_copy, :borrowings),
       order_by: [desc: br.started_at],
       preload: [:user],
