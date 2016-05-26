@@ -30,29 +30,14 @@ defmodule SL.BookController do
 
     case Repo.insert(changeset) do
       {:ok, book} ->
+        SL.Feed.Broadcast.new_book(book, book_path(conn, :show, book))
+
         conn
-        |> broadcast_new_book_feed(book)
         |> put_flash(:info, "Book created successfully.")
         |> redirect(to: book_path(conn, :index))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
-  end
-
-  defp broadcast_new_book_feed(conn, book) do
-    {:ok, feed} =
-      %SL.Feed{
-        title: "New book",
-        content: "*#{book.title}* has been added.",
-        link: book_path(conn, :show, book)
-      }
-      |> Repo.insert
-
-    feed_json = Phoenix.View.render(SL.FeedView, "feed.json", %{feed: feed})
-
-    SL.Endpoint.broadcast("feed:lobby", "new_feed", %{feed: feed_json})
-
-    conn
   end
 
   def show(conn, %{"id" => id}) do
