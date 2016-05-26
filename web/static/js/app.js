@@ -74,6 +74,7 @@ let borrowBookCopyWidget = document.getElementById("borrow-book-copy-widget");
 
 if (borrowBookCopyWidget) {
   let bookCopyId = borrowBookCopyWidget.getAttribute("data-book-copy-id");
+  let currentUserId = borrowBookCopyWidget.getAttribute("data-current_user_id");
   let token = borrowBookCopyWidget.getAttribute("data-token");
   let borrowChannel = socket.channel(`borrow_book_copy:${bookCopyId}`, {token: token});
   borrowChannel.join()
@@ -83,17 +84,18 @@ if (borrowBookCopyWidget) {
   borrowChannel.on("borrowing_updated", data => { renderWidget(data) });
 
   function renderWidget (status) {
-    console.log(status);
     if (status.available === true) {
       borrowBookCopyWidget.innerHTML = renderAvailableToBorrow();
       document.querySelector(".to-borrow").addEventListener("click", e => {
         borrowChannel.push("borrow");
       });
-    } else if (status.can_return === true) {
+    } else if (status.borrowed_by.user_id == currentUserId) {
       borrowBookCopyWidget.innerHTML = renderCanReturn();
       document.querySelector(".to-return").addEventListener("click", e => {
         borrowChannel.push("return");
       });
+    } else {
+      borrowBookCopyWidget.innerHTML = renderCantBorrow(status.borrowed_by);
     }
   }
 
@@ -113,6 +115,21 @@ if (borrowBookCopyWidget) {
     returnButton.innerText = "OK. I want to return it now.";
     returnButton.className = "btn btn-info btn-lg btn-block to-return";
     template.appendChild(returnButton);
+
+    return template.outerHTML;
+  }
+
+  function renderCantBorrow (borrowed_by) {
+    let template = document.createElement("div");
+    let button = document.createElement("button");
+    button.innerText = "I'm borrowing it!";
+    button.setAttribute("disabled", "disabled");
+    button.className = "btn btn-primary btn-lg btn-block to-borrow";
+    template.appendChild(button);
+    let infoSpan = document.createElement("span");
+    infoSpan.innerText = `Copy borrowed by ${borrowed_by.first_name} ${borrowed_by.last_name}.`;
+    infoSpan.className = "text-muted";
+    template.appendChild(infoSpan);
 
     return template.outerHTML;
   }
