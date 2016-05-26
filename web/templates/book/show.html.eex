@@ -21,7 +21,7 @@
       <%= link "Add copy", to: book_book_copy_path(@conn, :new, @book) %>
     </div>
   </div>
-  <%= @book.description %>
+  <%= format_description(@book) %>
 </p>
 
 <%= link "Back to list of books", to: book_path(@conn, :index) %>
