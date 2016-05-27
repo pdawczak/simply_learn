@@ -30,7 +30,7 @@ defmodule SL.BookController do
 
     case Repo.insert(changeset) do
       {:ok, book} ->
-        SL.Feed.Broadcast.new_book(book, book_path(conn, :show, book))
+        SL.Feed.Broadcast.new_book(book, book_path(conn, :show, book), conn.assigns.current_user)
 
         conn
         |> put_flash(:info, "Book created successfully.")
