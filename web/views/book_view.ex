@@ -3,7 +3,9 @@ defmodule SL.BookView do
 
   alias SL.Book
 
-  def intro(book = %Book{description: description}) when byte_size(description) > 0 do
+  def intro(book = %Book{description: description})
+      when byte_size(description) > 0
+  do
     book
     |> format_description
     |> List.first
