@@ -10,7 +10,7 @@ defmodule SL.Feed.Broadcast do
     |> handle
   end
 
-  def new_book(book = %SL.Book{title: title}, link) do
+  def new_book(%SL.Book{title: title}, link) do
     %Feed{
       title: "New book",
       content: "*#{title}* has been added.",
