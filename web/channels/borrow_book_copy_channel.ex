@@ -2,6 +2,7 @@ defmodule SL.BorrowBookCopyChannel do
   use SL.Web, :channel
 
   alias SL.{Borrowing, BookCopy}
+  alias SL.Feed.Broadcast
 
   def join("borrow_book_copy:" <> id, _payload, socket) do
     book_copy =
@@ -29,7 +30,7 @@ defmodule SL.BorrowBookCopyChannel do
                                     user_id: user.id})
       |> Repo.insert!
 
-    SL.Feed.Broadcast.book_borrowed(book_copy.book, user)
+    Broadcast.book_borrowed(book_copy.book, user)
 
     broadcast socket, "borrowing_updated", borrowing_status(book_copy)
 
@@ -43,7 +44,7 @@ defmodule SL.BorrowBookCopyChannel do
       |> Borrowing.changeset(%{ended_at: Ecto.DateTime.utc})
       |> Repo.update!
 
-    SL.Feed.Broadcast.book_returned(book_copy.book, user)
+    Broadcast.book_returned(book_copy.book, user)
 
     broadcast socket, "borrowing_updated", borrowing_status(book_copy)
 
