@@ -19,6 +19,22 @@ defmodule SL.Feed.Broadcast do
     |> handle
   end
 
+  def book_borrowed(%SL.Book{title: title}, %SL.User{first_name: first_name, last_name: last_name}) do
+    %Feed{
+      title: "Book borrowed",
+      content: "*#{first_name} #{last_name}* has just borrowed copy of *#{title}*",
+    }
+    |> handle
+  end
+
+  def book_returned(%SL.Book{title: title}, %SL.User{first_name: first_name, last_name: last_name}) do
+    %Feed{
+      title: "Book returned",
+      content: "*#{first_name} #{last_name}* has just returned copy of *#{title}*",
+    }
+    |> handle
+  end
+
   defp handle(feed) do
     feed_json = View.render(FeedView,
                             "feed.json",

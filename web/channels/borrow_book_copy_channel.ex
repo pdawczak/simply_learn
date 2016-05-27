@@ -27,24 +27,11 @@ defmodule SL.BorrowBookCopyChannel do
                                     user_id: user.id})
       |> Repo.insert!
 
-    broadcast_book_borrowed(book_copy.book, user)
+    SL.Feed.Broadcast.book_borrowed(book_copy.book, user)
 
     broadcast socket, "borrowing_updated", borrowing_status(book_copy)
 
     {:reply, :ok, socket}
-  end
-
-  defp broadcast_book_borrowed(book, user) do
-    feed =
-      %SL.Feed{
-        title: "Book borrowed",
-        content: "*#{user.first_name} #{user.last_name}* has just borrowed copy of *#{book.title}*",
-      }
-      |> Repo.insert!
-
-    feed_json = Phoenix.View.render(SL.FeedView, "feed.json", %{feed: feed})
-
-    SL.Endpoint.broadcast("feed:lobby", "new_feed", %{feed: feed_json})
   end
 
   def handle_in("return", _params, book_copy, user, socket) do
@@ -54,24 +41,11 @@ defmodule SL.BorrowBookCopyChannel do
       |> SL.Borrowing.changeset(%{ended_at: Ecto.DateTime.utc})
       |> Repo.update!
 
-    broadcast_book_returned(book_copy.book, user)
+    SL.Feed.Broadcast.book_returned(book_copy.book, user)
 
     broadcast socket, "borrowing_updated", borrowing_status(book_copy)
 
     {:reply, :ok, socket}
-  end
-
-  defp broadcast_book_returned(book, user) do
-    feed =
-      %SL.Feed{
-        title: "Book returned",
-        content: "*#{user.first_name} #{user.last_name}* has just returned copy of *#{book.title}*",
-      }
-      |> Repo.insert!
-
-    feed_json = Phoenix.View.render(SL.FeedView, "feed.json", %{feed: feed})
-
-    SL.Endpoint.broadcast("feed:lobby", "new_feed", %{feed: feed_json})
   end
 
   defp borrowing_status(book_copy) do
