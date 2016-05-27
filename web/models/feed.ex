@@ -6,6 +6,8 @@ defmodule SL.Feed do
     field :content, :string
     field :link, :string
 
+    belongs_to :user, SL.User
+
     timestamps
   end
 
@@ -23,6 +25,7 @@ defmodule SL.Feed do
 
     q = from f in SL.Feed,
       order_by: [desc: f.inserted_at],
+      preload: [:user],
       limit: ^limit
 
     SL.Repo.all(q)
