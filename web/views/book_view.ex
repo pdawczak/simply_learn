@@ -3,17 +3,28 @@ defmodule SL.BookView do
 
   alias SL.Book
 
-  def shorter_description(%Book{description: nil}),
+  def intro(book = %Book{description: description}) when byte_size(description) > 0 do
+    book
+    |> format_description
+    |> List.first
+    |> ensure_length(600)
+  end
+
+  defp ensure_length({:safe, [_, description, _]}, max_length) do
+    case byte_size(description) > max_length do
+      true ->
+        description
+        |> String.slice(0, max_length)
+        |> (fn text -> text <> "..." end).()
+      false ->
+        description
+    end
+  end
+
+  def intro(_),
   do: ""
 
-  @length 250
-  def shorter_description(%Book{description: description}) when byte_size(description) > @length,
-  do: String.slice(description, 0, @length) <> "..."
-
-  def shorter_description(%Book{description: description}),
-  do: description
-
-  def format_description(%{description: nil}),
+  def format_description(%Book{description: nil}),
   do: ""
 
   def format_description(%Book{description: description}) do

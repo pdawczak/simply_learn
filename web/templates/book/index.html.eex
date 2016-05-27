@@ -12,7 +12,7 @@
     <div class="col-sm-9">
       <h4><%= link book.title, to: book_path(@conn, :show, book) %></h4>
       <small class="text-muted"><%= book.isbn %></small>
-      <p><%= shorter_description(book) %></p>
+      <p><%= intro(book) %></p>
     </div>
   </div>
 <% end %>
