@@ -84,8 +84,7 @@ let borrowBookCopyWidget = document.getElementById("borrow-book-copy-widget");
 if (borrowBookCopyWidget) {
   let bookCopyId = borrowBookCopyWidget.getAttribute("data-book-copy-id");
   let currentUserId = borrowBookCopyWidget.getAttribute("data-current_user_id");
-  let token = borrowBookCopyWidget.getAttribute("data-token");
-  let borrowChannel = socket.channel(`borrow_book_copy:${bookCopyId}`, {token: token});
+  let borrowChannel = socket.channel(`borrow_book_copy:${bookCopyId}`);
   borrowChannel.join()
     .receive("ok", resp => { renderWidget(resp.status); })
     .receive("error", resp => { console.log(resp); });
