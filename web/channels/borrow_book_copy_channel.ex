@@ -1,9 +1,11 @@
 defmodule SL.BorrowBookCopyChannel do
   use SL.Web, :channel
 
+  alias SL.{Borrowing, BookCopy}
+
   def join("borrow_book_copy:" <> id, _payload, socket) do
     book_copy =
-      SL.BookCopy
+      BookCopy
       |> Repo.get(id)
       |> Repo.preload(:book)
 
@@ -38,7 +40,7 @@ defmodule SL.BorrowBookCopyChannel do
     borrowing =
       book_copy
       |> last_borrowing
-      |> SL.Borrowing.changeset(%{ended_at: Ecto.DateTime.utc})
+      |> Borrowing.changeset(%{ended_at: Ecto.DateTime.utc})
       |> Repo.update!
 
     SL.Feed.Broadcast.book_returned(book_copy.book, user)
