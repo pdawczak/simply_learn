@@ -43,7 +43,16 @@ if (feedContainer) {
           ${feed.title}
         </div>
         <div class="panel-body">
-          ${feed.content}
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="thumbnail">
+                <img src="${feed.user.picture_url}" />
+              </div>
+            </div>
+            <div class="col-sm-9">
+              ${feed.content}
+            </div>
+          </div>
         </div>
         <div class="panel-footer">
           ${feed.inserted_at}
